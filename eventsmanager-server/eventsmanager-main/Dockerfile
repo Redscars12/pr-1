@@ -7,7 +7,7 @@ COPY Template.Data/*.csproj ./Template.Data/
 COPY Template.Domain/*.csproj ./Template.Domain/
 COPY Template.Core/*.csproj ./Template.Core/
 COPY Template.Common/*.csproj ./Template.Common/
-
+COPY Template.Tests/*.csproj ./Template.Tests/
 RUN dotnet restore
 
 COPY . .

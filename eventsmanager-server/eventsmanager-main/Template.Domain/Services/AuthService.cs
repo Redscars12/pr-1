@@ -123,7 +123,9 @@ public class AuthService(AppDbContext context, IUserRepository userRepository, I
     {
         string refreshToken = GenerateRefreshToken();
         user.RefreshToken = refreshToken;
-        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(int.Parse(Environment.GetEnvironmentVariable("REFRESH_TOKEN_EXPIRY_DAYS")!));
+       var refreshExpiry = Environment.GetEnvironmentVariable("REFRESH_TOKEN_EXPIRY_DAYS");
+        int refreshDays = int.TryParse(refreshExpiry, out int days) ? days : 7;
+        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(refreshDays);
         await context.SaveChangesAsync();
         return refreshToken;
     }
@@ -142,11 +144,13 @@ public class AuthService(AppDbContext context, IUserRepository userRepository, I
 
         SigningCredentials creds = new(key, SecurityAlgorithms.HmacSha512);
 
+        var jwtExpiry = Environment.GetEnvironmentVariable("JWT_TOKEN_EXPIRY_MINUTES");
+int     jwtMinutes = int.TryParse(jwtExpiry, out int mins) ? mins : 60;
         JwtSecurityToken tokenDescriptor = new(
             issuer: Environment.GetEnvironmentVariable("JWT_ISSUER"),
             audience: Environment.GetEnvironmentVariable("JWT_AUDIENCE"),
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(int.Parse(Environment.GetEnvironmentVariable("JWT_TOKEN_EXPIRY_MINUTES")!)),
+            expires: DateTime.UtcNow.AddMinutes(jwtMinutes),
             signingCredentials: creds
         );
 

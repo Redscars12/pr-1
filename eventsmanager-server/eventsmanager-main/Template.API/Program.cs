@@ -84,10 +84,7 @@ if (app.Environment.IsDevelopment())
                 .WithDefaultHttpClient(ScalarTarget.Shell, ScalarClient.Curl));
 }
 
-if (app.Environment.IsProduction())
-{
-    app.UseCors("AllowReactFrontend");
-}
+app.UseCors("AllowReactFrontend");
 
 
 app.UseAuthorization();

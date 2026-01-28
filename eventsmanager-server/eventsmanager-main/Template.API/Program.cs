@@ -49,19 +49,13 @@ builder.Services.AddControllers()
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
-    {
-        policy
-            .AllowAnyOrigin()
-            .AllowAnyHeader()
-            .AllowAnyMethod();
-    });
     options.AddPolicy("AllowReactFrontend", policy =>
     {
         policy
-            .WithOrigins("https://sportzone-client.onrender.com")
+            .SetIsOriginAllowed(origin => true) // Позволява на всеки фронтенд (вкл. Vercel) да се свърже
             .AllowAnyHeader()
-            .AllowAnyMethod();
+            .AllowAnyMethod()
+            .AllowCredentials(); // Важно за логването
     });
 });
 

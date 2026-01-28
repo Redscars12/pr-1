@@ -1,7 +1,9 @@
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL || "https://events-api-cmwi.onrender.com/api";
+
 const api = axios.create({
-  baseURL: "http://localhost:10000/api",
+  baseURL: API_URL,
 });
 
 api.interceptors.request.use((config) => {
@@ -23,9 +25,9 @@ api.interceptors.response.use(
 
       if (refreshToken) {
         try {
-          const response = await axios.post("http://localhost:10000/api/Auth/refresh-token", {
-            refreshToken: refreshToken
-          });
+          const response = await axios.post(`${API_URL}/Auth/refresh-token`, {
+  refreshToken: refreshToken
+});
 
           const { accessToken, refreshToken: newRefreshToken } = response.data;
           

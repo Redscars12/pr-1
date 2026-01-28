@@ -18,8 +18,10 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    try {
-      await axios.post("http://localhost:10000/api/Auth/register", form, {
+   try {
+      const API_URL = import.meta.env.VITE_API_URL || "https://events-api-cmwi.onrender.com/api";
+
+      await axios.post(`${API_URL}/Auth/register`, form, {
         headers: { "Content-Type": "application/json" },
       });
 
@@ -28,6 +30,7 @@ export default function Register() {
       navigate("/login");
     } catch (err) {
       console.error(err);
+      alert("Грешка при регистрация!");
     } finally {
       setLoading(false);
     }
